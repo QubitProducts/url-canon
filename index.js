@@ -1,11 +1,11 @@
 module.exports = function urlCanon(rawUrl) {
   var parser = document.createElement('a');
   parser.href = rawUrl;
-  if (Boolean(parser.search) === true) {
-    parser.search = '?' + sortQuery(parser.search.replace(/^\?/, ''));
-  }
   parser.href = normalizeEscaped(parser.href);
   parser.href = removeTrailing(parser.href);
+  parser.href = replaceSearch(parser.href, function (search) {
+    return sortQuery(search);
+  });
   return parser.href;
 };
 
@@ -21,7 +21,13 @@ function normalizeEscaped(href) {
 
 function removeTrailing(href) {
   return href
-    .replace(/#$/, '')
-    .replace(/\?$/, '')
-    .replace(/\?#/, '#');
+    .replace(/^([^#]*)#$/, function (match, p1) { return p1; })
+    .replace(/^([^?#]*)\?$/, function (match, p1) { return p1; })
+    .replace(/^([^?]*)\?#/, function (match, p1) { return p1 + '#'; });
+}
+
+function replaceSearch(href, fn) {
+  return href.replace(/\?([^?#]*)/, function (match, search) {
+    return '?' + fn(search);
+  });
 }

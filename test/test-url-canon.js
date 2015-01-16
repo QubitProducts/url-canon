@@ -55,6 +55,24 @@ describe('url-canon', function () {
   it('should remove trailing ?', function () {
     expect(urlCanon('http://example.com?')).to.be('http://example.com/');
   });
+  it('should remove trailing ? and hash', function () {
+    expect(urlCanon('http://example.com?#')).to.be('http://example.com/');
+  });
+  it('should not remove trailing hash if part of the hash', function () {
+    expect(urlCanon('http://example.com##')).to.be('http://example.com/##');
+    expect(urlCanon('http://example.com#yo#')).to.be('http://example.com/#yo#');
+    expect(urlCanon('http://example.com?no=way#yo#')).to.be('http://example.com/?no=way#yo#');
+  });
+  it('should not remove trailing ? if part of the hash', function () {
+    expect(urlCanon('http://example.com#?')).to.be('http://example.com/#?');
+    expect(urlCanon('http://example.com#yo?')).to.be('http://example.com/#yo?');
+    expect(urlCanon('http://example.com?no=way#yo?')).to.be('http://example.com/?no=way#yo?');
+  });
+  it('should not remove trailing ? if part of the query', function () {
+    expect(urlCanon('http://example.com??')).to.be('http://example.com/??');
+    expect(urlCanon('http://example.com?yo?')).to.be('http://example.com/?yo?');
+    expect(urlCanon('http://example.com?no=way?yo#')).to.be('http://example.com/?no=way?yo');
+  });
   it('should ensure trailing / when no path is present', function () {
     expect(urlCanon('http://example.com')).to.be('http://example.com/');
   });

@@ -1,0 +1,22 @@
+{
+  "name": "url-canon",
+  "version": "0.0.0",
+  "description": "Normalizes URL's to prevent duplicates that point to the same server resource",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jscs": "^1.10.0",
+    "jshint": "^2.5.10",
+    "karma": "^0.12.28",
+    "karma-browserify": "^1.0.0",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-expect": "^1.1.0",
+    "karma-mocha": "^0.1.9",
+    "karma-spec-reporter": "0.0.13",
+    "mocha": "^2.0.1"
+  }
+}

@@ -1,16 +1,16 @@
 module.exports = function urlCanon(rawUrl) {
-  var parser = document.createElement('a');
-  parser.href = rawUrl;
-  parser.href = normalizeEscaped(parser.href);
-  parser.href = removeTrailing(parser.href);
-  parser.href = replaceSearch(parser.href, function (search) {
-    return sortQuery(search);
-  });
-  return parser.href;
+  return compose(
+    replaceSearch(sortQuery),
+    removeTrailing,
+    normalizeEscaped,
+    parse
+  )(rawUrl);
 };
 
-function sortQuery(query) {
-  return query.split('&').sort().join('&');
+function parse(href) {
+  var parser = document.createElement('a');
+  parser.href = href;
+  return parser.href;
 }
 
 function normalizeEscaped(href) {
@@ -26,8 +26,27 @@ function removeTrailing(href) {
     .replace(/^([^?]*)\?#/, function (match, p1) { return p1 + '#'; });
 }
 
-function replaceSearch(href, fn) {
-  return href.replace(/\?([^?#]*)/, function (match, search) {
-    return '?' + fn(search);
-  });
+function replaceSearch(fn) {
+  return function (href) {
+    return href.replace(/\?([^?#]*)/, function (match, search) {
+      return '?' + fn(search);
+    });
+  };
+}
+
+function sortQuery(query) {
+  return query.split('&').sort().join('&');
+}
+
+function compose() {
+  var args = arguments;
+  var start = args.length - 1;
+  return function () {
+    var i = start;
+    var result = args[start].apply(this, arguments);
+    while (i--) {
+      result = args[i].call(this, result);
+    }
+    return result;
+  };
 }

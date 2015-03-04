@@ -1,6 +1,17 @@
-URL Canon
----------
+![url-canon](https://cloud.githubusercontent.com/assets/823104/6485788/0f8784ae-c27e-11e4-9ba5-be08bb7cc852.png)
+
 Normalizes URL's to prevent duplicates that point to the same server resource.
+
+```javascript
+var urlCanon = require('url-canon')
+urlCanon('http://www.google.com/?b=hey&a=yo&#')
+// => returns 'http://www.google.com/?&a=yo&b=hey'
+```
+
+## Installation
+```bash
+npm install qubitdigital/url-canon
+```
 
 ## Features
 

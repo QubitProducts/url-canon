@@ -2,7 +2,7 @@
   "name": "url-canon",
   "version": "0.0.0",
   "description": "Normalizes URL's to prevent duplicates that point to the same server resource",
-  "main": "index.js",
+  "main": "url-canon.js",
   "scripts": {
     "test": "karma start"
   },

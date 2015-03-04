@@ -1,4 +1,4 @@
-var urlCanon = require('../index');
+var urlCanon = require('../url-canon');
 
 describe('url-canon', function () {
 

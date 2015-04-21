@@ -1,6 +1,6 @@
 {
   "name": "url-canon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Normalizes URL's to prevent duplicates that point to the same server resource",
   "main": "url-canon.js",
   "scripts": {

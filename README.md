@@ -10,7 +10,7 @@ urlCanon('http://www.google.com/?b=hey&a=yo&#')
 
 ## Installation
 ```bash
-npm install qubitdigital/url-canon
+npm install url-canon
 ```
 
 ## Features

@@ -26,58 +26,58 @@ describe('url-canon', function () {
 
   it('should re-order query params alphabetically', function () {
     expect(urlCanon('http://example.com/?bre=con&ponty=pool&aber=gavenny'))
-      .to.be('http://example.com/?aber=gavenny&bre=con&ponty=pool');
+      .to.be('http://example.com?aber=gavenny&bre=con&ponty=pool');
   });
   it('should convert needlessly percent-encoded bytes to the corresponding ASCII char', function () {
     expect(urlCanon('http://example.com/%7efoo%2Ebar')).to.be('http://example.com/~foo.bar');
   });
   it('should remove port 80 for http', function () {
-    expect(urlCanon('http://example.com:80/?hey=you')).to.be('http://example.com/?hey=you');
+    expect(urlCanon('http://example.com:80/?hey=you')).to.be('http://example.com?hey=you');
   });
   it('should not remove port 80 for https', function () {
-    expect(urlCanon('https://example.com:80/?hey=you')).to.be('https://example.com:80/?hey=you');
+    expect(urlCanon('https://example.com:80/?hey=you')).to.be('https://example.com:80?hey=you');
   });
   it('should remove port 443 for http', function () {
-    expect(urlCanon('https://example.com:443/?hey=you')).to.be('https://example.com/?hey=you');
+    expect(urlCanon('https://example.com:443/?hey=you')).to.be('https://example.com?hey=you');
   });
   it('should not remove port 443 for https', function () {
-    expect(urlCanon('http://example.com:443/?hey=you')).to.be('http://example.com:443/?hey=you');
+    expect(urlCanon('http://example.com:443/?hey=you')).to.be('http://example.com:443?hey=you');
   });
   it('should lowercase the protocol', function () {
-    expect(urlCanon('hTTp://example.com?hey=you')).to.be('http://example.com/?hey=you');
+    expect(urlCanon('hTTp://example.com?hey=you')).to.be('http://example.com?hey=you');
   });
   it('should lowercase the hostname', function () {
-    expect(urlCanon('http://eXAmple.COm?hey=you')).to.be('http://example.com/?hey=you');
+    expect(urlCanon('http://eXAmple.COm?hey=you')).to.be('http://example.com?hey=you');
   });
   it('should remove trailing hash', function () {
-    expect(urlCanon('http://example.com?hey=you#')).to.be('http://example.com/?hey=you');
+    expect(urlCanon('http://example.com?hey=you#')).to.be('http://example.com?hey=you');
   });
   it('should remove trailing ?', function () {
-    expect(urlCanon('http://example.com?')).to.be('http://example.com/');
+    expect(urlCanon('http://example.com?')).to.be('http://example.com');
   });
   it('should remove trailing ? and hash', function () {
-    expect(urlCanon('http://example.com?#')).to.be('http://example.com/');
+    expect(urlCanon('http://example.com?#')).to.be('http://example.com');
   });
   it('should not remove trailing hash if part of the hash', function () {
-    expect(urlCanon('http://example.com##')).to.be('http://example.com/##');
-    expect(urlCanon('http://example.com#yo#')).to.be('http://example.com/#yo#');
-    expect(urlCanon('http://example.com?no=way#yo#')).to.be('http://example.com/?no=way#yo#');
+    expect(urlCanon('http://example.com##')).to.be('http://example.com##');
+    expect(urlCanon('http://example.com#yo#')).to.be('http://example.com#yo#');
+    expect(urlCanon('http://example.com?no=way#yo#')).to.be('http://example.com?no=way#yo#');
   });
   it('should not remove trailing ? if part of the hash', function () {
-    expect(urlCanon('http://example.com#?')).to.be('http://example.com/#?');
-    expect(urlCanon('http://example.com#yo?')).to.be('http://example.com/#yo?');
-    expect(urlCanon('http://example.com?no=way#yo?')).to.be('http://example.com/?no=way#yo?');
+    expect(urlCanon('http://example.com#?')).to.be('http://example.com#?');
+    expect(urlCanon('http://example.com#yo?')).to.be('http://example.com#yo?');
+    expect(urlCanon('http://example.com?no=way#yo?')).to.be('http://example.com?no=way#yo?');
   });
   it('should not remove trailing ? if part of the query', function () {
-    expect(urlCanon('http://example.com??')).to.be('http://example.com/??');
-    expect(urlCanon('http://example.com?yo?')).to.be('http://example.com/?yo?');
-    expect(urlCanon('http://example.com?no=way?yo#')).to.be('http://example.com/?no=way?yo');
+    expect(urlCanon('http://example.com??')).to.be('http://example.com??');
+    expect(urlCanon('http://example.com?yo?')).to.be('http://example.com?yo?');
+    expect(urlCanon('http://example.com?no=way?yo#')).to.be('http://example.com?no=way?yo');
   });
-  it('should ensure trailing / when no path is present', function () {
-    expect(urlCanon('http://example.com')).to.be('http://example.com/');
+  it('should remove trailing /', function () {
+    expect(urlCanon('http://example.com/')).to.be('http://example.com');
   });
-  it('should not ensure trailing / when a path is present', function () {
-    expect(urlCanon('http://example.com/path')).to.be('http://example.com/path');
+  it('should remove trailing / when a path is present', function () {
+    expect(urlCanon('http://example.com/path/')).to.be('http://example.com/path');
   });
   it('should not change encoded internationalised pathnames', function () {
     expect(urlCanon('http://example.com/%E5%BC%95%E3%81%8D%E5%89%B2%E3%82%8A.html'))
@@ -88,20 +88,20 @@ describe('url-canon', function () {
       .to.be('http://example.com/%E5%BC%95%E3%81%8D%E5%89%B2%E3%82%8A.html');
   });
   it('should uppercase percent encoded bytes', function () {
-    expect(urlCanon('http://example.com/foo%c2%b5bar/')).to.be('http://example.com/foo%C2%B5bar/');
+    expect(urlCanon('http://example.com/foo%c2%b5bar/')).to.be('http://example.com/foo%C2%B5bar');
   });
   it('should throw error for malformed percent encoded bytes', function () {
     expect(urlCanon).withArgs('http://example.com/foo%fbbar/').to.throwException();
   });
 
   it('should leave additional ? characters alone in the query string', function () {
-    expect(urlCanon('http://example.com/?hey?there')).to.be('http://example.com/?hey?there');
+    expect(urlCanon('http://example.com/?hey?there')).to.be('http://example.com?hey?there');
   });
   it('should leave ? alone in the fragment identifier', function () {
-    expect(urlCanon('http://example.com/#foo?hey')).to.be('http://example.com/#foo?hey');
+    expect(urlCanon('http://example.com/#foo?hey')).to.be('http://example.com#foo?hey');
   });
   it('should leave additional # characters alone in the fragment identifier', function () {
-    expect(urlCanon('http://example.com/#foo#hey')).to.be('http://example.com/#foo#hey');
+    expect(urlCanon('http://example.com/#foo#hey')).to.be('http://example.com#foo#hey');
   });
   it('should leave equal signs not in GET parameters alone', function () {
     expect(urlCanon('http://example.com/pi=ng')).to.be('http://example.com/pi=ng');
@@ -122,10 +122,10 @@ describe('url-canon', function () {
     expect(urlCanon('http://example.com/pi%3dng%3D')).to.be('http://example.com/pi%3Dng%3D');
   });
   it('should not percent encode the colon separating the host name and the port number', function () {
-    expect(urlCanon('http://example.com:1234/')).to.be('http://example.com:1234/');
+    expect(urlCanon('http://example.com:1234/')).to.be('http://example.com:1234');
   });
   it('should not percent encode the colon separating the ip and the port number', function () {
-    expect(urlCanon('http://0.0.0.0:1234/')).to.be('http://0.0.0.0:1234/');
+    expect(urlCanon('http://0.0.0.0:1234/')).to.be('http://0.0.0.0:1234');
   });
 
 });
